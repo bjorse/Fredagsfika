@@ -6,7 +6,7 @@ Compile the solution like any other .NET application. Navigate to `Fredagsfika/b
 
 ## Arguments
 
-There are three arguments needed for a successful result. Beware there are no error handling so any faulty parameters will crash the app. The first argument is the *date* of the last fredagsfika, written in the `YYYY-MM-dd` format. The second argument is the *user* that provided fredagsfika the last time. The user must be listed in the file `users.txt`. The third and last argument is how many occurrences that should be generated. There's no upper limit. An example: `Fredagsfika.exe 2016-04-20 Björn 10`. This will generate a result like this:
+There are three arguments needed for a successful result. Beware there are no error handling so any faulty parameters will crash the app. The first argument is the *date* of the last fredagsfika, written in the `YYYY-MM-DD` format. The second argument is the *user* that provided fredagsfika the last time. The user must be listed in the file `users.txt`. The third and last argument is how many occurrences that should be generated (observe there's no upper limit). An example: `Fredagsfika.exe 2016-04-20 Björn 10`. This will generate a result like this:
 
 ```
 ["Fredagsfika tuesday 2016-04-26 is provided by Jan";
