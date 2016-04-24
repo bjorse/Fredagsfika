@@ -1,26 +1,31 @@
 ﻿module Program
 
 open System
+open ArgumentParser
 open UserData
 open DataAggregator
+open ResultFormatter
 
-let parseResultItem (users, item) =
-    let date = fst item : DateTime
-    let userId = int (snd item)
-    let weekDay = date.DayOfWeek.ToString().ToLower()
-    let formattedDate = date.ToShortDateString()
-    let personName = List.nth users userId
+let parseArguments (args : string array) =
+    match ArgumentParser.tryParseArguments args with
+    | Some result -> result
+    | None -> failwith "Invalid arguments (invalid formatting or wrong number of arguments)"
 
-    sprintf "Fredagsfika %s %s is provided by %s" weekDay formattedDate personName
+let getUserIndex (users : string list, username : string) =
+    match UserData.getUserIndex (username, users) with
+    | Some index -> index
+    | None -> failwith (sprintf "Invalid username: %s" username)
 
 [<EntryPoint>]
 let main argv = 
-    let date = DateTime.Parse argv.[0]
-    let user = argv.[1]
-    let count = int argv.[2]
-    let users = UserData.getUsers UserData.defaultFilename |> Seq.toList
-    let result = DataAggregator.generateData (date, users, user, count)
-    let parsedResult = result |> List.map (fun x -> parseResultItem (users, x))
+    try
+        let parsedArgs = parseArguments argv
+        let users = UserData.getUsers UserData.defaultFilename |> Seq.toList
+        let userIndex = getUserIndex (users, parsedArgs.user)
+        let result = DataAggregator.generateData (parsedArgs.date, userIndex, users.Length, parsedArgs.resultCount)
+        let parsedResult = result |> List.map (fun x -> ResultFormatter.formatResultItem (users, x))
 
-    printf "%A" parsedResult
-    0 // return an integer exit code
+        printf "%A" parsedResult
+        0
+    with
+    | Failure msg -> printf "Could not execute due to an error: %s" msg; 0
