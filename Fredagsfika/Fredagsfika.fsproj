@@ -55,8 +55,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="DateGenerator.fs" />
-    <Compile Include="DataAggregator.fs" />
+    <Compile Include="DataGenerator.fs" />
     <Compile Include="UserData.fs" />
     <Compile Include="ArgumentParser.fs" />
     <Compile Include="ResultFormatter.fs" />
