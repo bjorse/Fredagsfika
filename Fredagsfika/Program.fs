@@ -11,7 +11,7 @@ let parseArguments (args : string array) =
     | Some result -> result
     | None -> failwith "invalid arguments (invalid formatting or wrong number of arguments)"
 
-let getUserIndex (users : string list, username : string) =
+let getUserIndex (users : string list) (username : string) =
     match UserData.getUserIndex (username, users) with
     | Some index -> index
     | None -> failwith (sprintf "invalid username: %s" username)
@@ -22,15 +22,14 @@ let parseUserFile filename =
     | None -> failwith (sprintf "file not found or contained no elements: %s" filename)
 
 [<EntryPoint>]
-let main argv = 
+let main argv =
     try
         let parsedArgs = parseArguments argv
         let users = parseUserFile UserData.defaultFilename
-        let userIndex = getUserIndex (users, parsedArgs.user)
+        let userIndex = getUserIndex users parsedArgs.user
         
-        (parsedArgs.date, userIndex, users.Length, parsedArgs.resultCount)
-        |> DataGenerator.generateOccurrences 
-        |> (fun x -> ResultFormatter.formatResult (users, x))
+        DataGenerator.generateOccurrences parsedArgs.date userIndex users.Length parsedArgs.resultCount
+        |> ResultFormatter.formatResult users
         |> printf "%s"
 
         0

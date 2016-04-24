@@ -14,21 +14,21 @@ let getNextDate (previousDate : DateTime) =
     let nextWeekDate = previousDate.AddDays 7.0
     nextWeekDate.DayOfWeek |> getDaysToAdd |> float |> nextWeekDate.AddDays
 
-let getNextUserIndex (previousIndex : int, userCount : int) =
+let getNextUserIndex (previousIndex : int) (userCount : int) =
     match previousIndex with
     | x when x + 1 > userCount - 1 -> 0
     | x -> x + 1
 
-let getNextOccurrence ((date : DateTime, userIndex : int), userCount : int) =
-    getNextDate date, getNextUserIndex (userIndex, userCount)
+let getNextOccurrence (userCount : int) (date : DateTime, userIndex : int)  =
+    getNextDate date, getNextUserIndex userIndex userCount
 
-let generateOccurrences (date : DateTime, userIndex : int, userCount : int, resultCount : int) =
+let generateOccurrences (date : DateTime) (userIndex : int) (userCount : int) (resultCount : int) =
     let rec loop result = 
         match result with
         | [] -> match resultCount with
                 | x when x <= 0 -> []
-                | _ -> loop [getNextOccurrence ((date, userIndex), userCount)]
+                | _ -> loop [getNextOccurrence userCount (date, userIndex)]
         | _ -> match result.Length with
                | x when x = resultCount -> List.rev result 
-               | _ -> loop ((List.head result |> (fun x -> getNextOccurrence (x, userCount))) :: result)
+               | _ -> List.head result |> getNextOccurrence userCount |> (fun x -> x :: result) |> loop
     loop []
