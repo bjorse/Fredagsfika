@@ -27,10 +27,12 @@ let main argv =
         let parsedArgs = parseArguments argv
         let users = parseUserFile UserData.defaultFilename
         let userIndex = getUserIndex (users, parsedArgs.user)
-        let result = DataGenerator.generateOccurrences (parsedArgs.date, userIndex, users.Length, parsedArgs.resultCount)
-        let parsedResult = result |> List.map (fun x -> ResultFormatter.formatResultItem (users, x))
+        
+        (parsedArgs.date, userIndex, users.Length, parsedArgs.resultCount)
+        |> DataGenerator.generateOccurrences 
+        |> (fun x -> ResultFormatter.formatResult (users, x))
+        |> printf "%s"
 
-        printf "%A" parsedResult
         0
     with
-    | Failure msg -> printf "Could not execute due to an error: %s" msg; 0
+    | Failure msg -> printf "Could not execute due to an error: %s" msg; -1

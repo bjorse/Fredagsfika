@@ -10,3 +10,8 @@ let formatResultItem (users, item) =
     let personName = List.nth users userId
 
     sprintf "Fredagsfika %s %s is provided by %s" weekDay formattedDate personName
+
+let formatResult (users, result) =
+    result 
+    |> List.map (fun x -> formatResultItem (users, x)) 
+    |> String.concat Environment.NewLine
