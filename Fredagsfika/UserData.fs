@@ -17,12 +17,12 @@ let parseFileContents (fileContents : string list) =
     |> List.map (fun x -> x.Trim()) 
     |> List.filter (fun x -> x.Length > 0)
 
-let getUsers filename =
+let getUsersFromFile filename =
     match readFile filename with
     | Some result -> match parseFileContents result with
                      | users when users.Length = 0 -> None
                      | users -> Some(users)
     | None -> None
 
-let getUserIndex (username : string, users : string list) =
+let getUserIndex username (users : string list) =
     List.tryFindIndex (fun x -> x = username) users

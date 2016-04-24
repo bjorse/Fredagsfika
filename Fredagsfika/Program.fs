@@ -11,13 +11,13 @@ let parseArguments (args : string array) =
     | Some result -> result
     | None -> failwith "invalid arguments (invalid formatting or wrong number of arguments)"
 
-let getUserIndex (users : string list) (username : string) =
-    match UserData.getUserIndex (username, users) with
+let getUserIndex (users : string list) username =
+    match UserData.getUserIndex username users with
     | Some index -> index
     | None -> failwith (sprintf "invalid username: %s" username)
 
 let parseUserFile filename =
-    match UserData.getUsers filename with
+    match UserData.getUsersFromFile filename with
     | Some users -> users 
     | None -> failwith (sprintf "file not found or contained no elements: %s" filename)
 
